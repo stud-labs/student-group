@@ -1,15 +1,24 @@
-This file requires editing
-==========================
+Пример простого REST в проекте Pyramid
+======================================
 
-Note to the author: Please add something informative to this README *before*
-releasing your software, as `a little documentation goes a long way`_.  Both
-README.rst (this file) and NEWS.rst (release notes) will be included in your
-package metadata which gets displayed in the PyPI page for your project.
+Установка:
+1. Клонироание репозитория.
+2. Создание виртуальной среды Python 
 
-You can take a look at other projects, such as `pyramid's README.txt
-<https://github.com/Pylons/pyramid/blob/master/README.rst>`_ for some ideas.
+В папке проекта
+---------------
 
-.. _`a little documentation goes a long way`: http://www.martinaspeli.net/articles/a-little-documentation-goes-a-long-way
+https://cornice.readthedocs.io/en/latest/quickstart.html
+
+3. pip install -U pip
+4. pip install -r requirements.txt
+5. pip install -e .
+6. настроить соеднинение с mongodb (если мой, то надо ставить vpn).
+7. провести тестирование, будет создан экземпляр Group в mongo-БД.
+8. pserve development.ini --reload
+
+открыть браузер на http://localhost:6543/api/group/<groupid экземпляра>
+
 
 Credits
 -------
