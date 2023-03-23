@@ -2,15 +2,16 @@
 	py pot init-ru update-ru comp-cat \
 	upd-cat setup test setup-requs tests \
 	run-tests gdb-test clean
+	serv
 
 #A source dir of a local C/C++ library to link with
 #TOP_DIR=
 
 #A virtualenv name
-#LPYTHON=
+LPYTHON=zca
 V=$(HOME)/.pyenv/versions/$(LPYTHON)
 #VB=$(V)/bin
-#PYTHON=$(VB)/$(LPYTHON)
+PYTHON=python
 #ROOT=$(PWD)
 #INI=student-group
 #LCAT=src/student-group/locale/
@@ -74,3 +75,7 @@ upd-cat: pot update-ru comp-cat
 
 clean:
 	$(PYTHON) setup.py clean
+
+serv:
+	pserve development.ini --reload
+

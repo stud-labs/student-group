@@ -4,16 +4,15 @@ from .mongoconn import db
 
 
 class Base:
-    def store(self, coll):
+
+    def insert(self):
         d = {}
         for name in vars(self):
             val = getattr(self, name)
             d[name] = val
-
-        js = dumps(d)
+        coll = self.__class__.collection()
         rc = coll.insert_one(d)
-        print(rc)
-
+        return rc.inserted_id
 
     def loadattrs(self, json):
         if isinstance(json, dict):
@@ -23,9 +22,15 @@ class Base:
         for name, val in d.items():
             setattr(self, name, val)
 
+    def update(self, objid, json):
+        self.loadattrs(json)
+        newvalues = {"$set": json}
+        coll = self.__class__.collection()
+        coll.update_one({"_id": ObjectId(objid)}, newvalues)
+
     @classmethod
     def new(cls, coll, objid, class_):
-        answer = coll.find({"_id":ObjectId(objid)})
+        answer = coll.find({"_id": ObjectId(objid)})
         for d in answer:
             i = class_()
             i.loadattrs(d)
@@ -33,9 +38,13 @@ class Base:
 
     @classmethod
     def load(cls, db, objid):
+        coll = cls.collection()
+        g = cls.new(coll, objid, cls)
+        return g
+
+    @classmethod
+    def collection(cls):
         colname = cls.__name__.lower()
         if hasattr(cls, "__collection__"):
             colname = cls.__collection__
-        groups = db[colname]
-        g = cls.new(groups, objid, cls)
-        return g
+        return db[colname]
