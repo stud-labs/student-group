@@ -2,10 +2,86 @@
     <div metal:fill-slot="content">
 
         <div class="content">
-            <h1><span class="font-semi-bold">Pyramid</span> <span class="smaller">Starter project</span></h1>
-            <p class="lead">Welcome to <span class="font-normal">${project}</span>, a&nbsp;Pyramid
-                application generated&nbsp;by<br><span class="font-normal">Cookiecutter</span>.</p>
+            <h1><span class="font-semi-bold">Студенческие группы</span>
+                <div class="table_class">
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Код</th>
+                                <th scope="col">Название </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr>
+                                <td>0000</td>
+                                <td>NNNN</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="form_class">
+                    <div id="target">
+                        <div class="form-group">
+                            <label for="groupCode">Код группы</label>
+                            <input name="code"
+                                   class="form-control"
+                                   id="groupCode"
+                                   placeholder="Введите код группы">
+                        </div>
+                        <div class="form-group">
+                            <label for="groupName">Название группы</label>
+                            <input name="name"
+                                   class="form-control"
+                                   id="groupName"
+                                   placeholder="Введите название группы">
+                        </div>
+                        <button type="submit"
+                                id="formSubmitButton"
+                                class="btn btn-primary">Создать новую группу</button>
+                    </div>
+                </div>
         </div>
+    </div>
+    <div metal:fill-slot="jsSlot">
+        <script>
+         var GROUPSURL="http://localhost:6543/api/groups";
+         function reloadGroupList() {
+             $("#tableBody").html("");
+             $.get(GROUPSURL, function(response) {
+                 console.log(response);
+                 $.each(response, function(i, item) {
+                     var tr = $('<tr>').append(
+                         $('<td>').text(item.code),
+                         $('<td>').text(item.name),
+                     );
+                     $("#tableBody").append(tr);
+                 });
+             });
+         };
 
+         $( document ).ready(function() {
+             $( "#formSubmitButton" ).click(function( event ) {
+                 var name = $("#groupCode").val();
+                 var code = $("#groupName").val();
+                 var formData =
+                     {"name" : name,
+                      "code" : code
+                     };
+                 console.log(formData);
+                 $.ajax({
+                     url: GROUPSURL,
+                     type: 'PUT',
+                     data: JSON.stringify(formData),
+                     success: function(response) {
+                         var objid = response;
+                         console.log(objid);
+                         reloadGroupList();
+                     }
+                 });
+             });
+             reloadGroupList();
+         });
+
+        </script>
     </div>
 </div>

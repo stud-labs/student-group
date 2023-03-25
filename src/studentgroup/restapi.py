@@ -1,5 +1,6 @@
 from cornice import Service
 from .group import Group
+from .base import Base
 from .student import Student
 from .mongoconn import db
 
@@ -40,3 +41,14 @@ def put_group(request):
     objid = g.insert()
     d = {"id": str(objid), 'name': g.name, 'code': g.code}
     return d
+
+
+@groups.get()
+def get_groups(request):
+    l = Group.list()
+    nl = []
+    for objid, i in l:
+        nl.append(
+            {"id": str(objid), 'name': i.name, 'code': i.code}
+        )
+    return nl

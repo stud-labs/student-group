@@ -43,6 +43,16 @@ class Base:
         return g
 
     @classmethod
+    def list(cls):
+        coll = cls.collection()
+        l = []
+        for e in coll.find({}):
+            i = cls()
+            i.loadattrs(e)
+            l.append((e["_id"], i))
+        return l
+
+    @classmethod
     def collection(cls):
         colname = cls.__name__.lower()
         if hasattr(cls, "__collection__"):
